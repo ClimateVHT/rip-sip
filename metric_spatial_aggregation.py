@@ -71,12 +71,12 @@ def read_region(region_name):
     """Read shapefile for a given broadacre region"""
         
     broadacre_gdf = gp.read_file('aagis_asgs16v1_g5a.shp_/aagis_asgs16v1_g5a.shp')
-    if region_name == 'wheatbelt':
+    if region_name == 'aus-wheatbelt':
         wheatbelt_gdf = broadacre_gdf[broadacre_gdf.zone == 'Wheat Sheep']
         wheatbelt = wheatbelt_gdf.dissolve()
         wheatbelt = wheatbelt.drop(columns=['aagis', 'class', 'name'])
         region = regionmask.from_geopandas(
-            wheatbelt, names="zone", name="wheatbelt"
+            wheatbelt, names="zone", name="aus-wheatbelt"
         )
     else:
         raise ValueError(f'{region_name} is not a recognised region')
