@@ -1,5 +1,5 @@
 '''Command line program for spatial aggregation of metric files.'''
-
+import pdb
 import glob
 import argparse
 import datetime
@@ -97,11 +97,10 @@ def spatial_mean(da, region):
     return da_region_mean
 
 
-def add_metadata(da, metric_name, region_name):
+def add_metadata(ds, metric_name, region_name):
     """Add metadata to the output dataset"""
-    
-    ds = da.to_dataset(name=metric_name)
-    
+   
+    ds = ds.rename({'out': metric_name})
     ds[metric_name].attrs = definitions.METRIC_ATTRS[metric_name]
     ds['experiment'].attrs['long_name'] = 'Emission scenario'
     ds['rcm'].attrs['long_name'] = 'Regional Climate Model'
@@ -143,7 +142,10 @@ def main(args):
                 bc_list = []
                 for bias in biases:
                     bias_name = definitions.BIAS_NAMES[bias]
-                    infile = glob.glob(f'{dir_start}/*_{gcm}_{exp}_{rcm}_{bias}/{args.metric}.csv')
+                    fpattern = f'{dir_start}/*_{gcm}_{exp}_{rcm}_{bias}/{args.metric}.csv'
+                    infile = glob.glob(fpattern)
+                    print(fpattern)
+                    print(infile)
                     assert len(infile) == 1
                     da = read_data(infile[0])
                     da_region_mean = spatial_mean(da, region)
@@ -159,14 +161,13 @@ def main(args):
         da_gcm = xr.concat(gcm_list, dim='gcm')     
         exp_dict[exp_name] = da_gcm
     
-    da_ssp126 = xr.combine_by_coords([exp_dict['historical'], exp_dict['ssp126']])
-    da_ssp126['experiment'] = 'ssp126'
-    da_ssp370 = xr.combine_by_coords([exp_dict['historical'], exp_dict['ssp370']])
-    da_ssp370['experiment'] = 'ssp370'
-    da_out = xr.concat([da_ssp126, da_ssp370], dim='experiment')
-    
-    ds, encoding = add_metadata(da_out, args.metric, args.region)
-    ds.to_netcdf(args.outfile, encoding=encoding)
+    ds_ssp126 = xr.combine_by_coords([exp_dict['historical'], exp_dict['ssp126']])
+    ds_ssp126['experiment'] = 'ssp126'
+    ds_ssp370 = xr.combine_by_coords([exp_dict['historical'], exp_dict['ssp370']])
+    ds_ssp370['experiment'] = 'ssp370'
+    ds_ssp = xr.concat([ds_ssp126, ds_ssp370], dim='experiment')
+    ds_out, encoding = add_metadata(ds_ssp, args.metric, args.region)
+    ds_out.to_netcdf(args.outfile, encoding=encoding)
 
 
 if __name__ == '__main__':
