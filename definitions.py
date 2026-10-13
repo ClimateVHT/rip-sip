@@ -123,75 +123,75 @@ RUNS = {
 
 METRIC_ATTRS = {} 
 METRIC_ATTRS['livestockFSunaltered'] = {
-    'long_name': '',
-    'units': '',
+    'long_name': 'livestock farm stocking rate unaltered',
+    'units': 'dse/ha',
 }
 METRIC_ATTRS['livestockFS50CC'] = {
-    'long_name': '',
-    'units': '',
+    'long_name': 'livestock farm stocking rate with carrying capacity reduced by 50%',
+    'units': 'dse/ha',
 }
 METRIC_ATTRS['livestockFSgrowingseasonSTH'] = {
-    'long_name': '',
-    'units': '',
+    'long_name': 'livestock farm stocking rate during the southern Australia growing season (Apr-Oct)',
+    'units': 'dse/ha',
 }
 METRIC_ATTRS['livestockFSgrowingseasonNTH'] = {
-    'long_name': '',
-    'units': '',
+    'long_name': 'livestock farm stocking rate during the northern Australia growing season (Oct-Apr)',  # which months?
+    'units': 'dse/ha',
 }
 METRIC_ATTRS['croppingFS'] = {
-    'long_name': '',
-    'units': '',
+    'long_name': 'Estimated crop yield using the French-Schultz potential yield calculation',
+    'units': 't/ha',
 }
 METRIC_ATTRS['THItemperate'] = {
-    'long_name': '',
-    'units': '',
+    'long_name': 'Temperature-humidity index calibrated for a temperate climate',
+    'units': 'days', #???
 }
 METRIC_ATTRS['THItropical'] = {
-    'long_name': '',
-    'units': '',
+    'long_name': 'Temperature-humidity index calibrated for a tropical climate',
+    'units': 'days',  #???
 }
 METRIC_ATTRS['annRain'] = {
     'long_name': 'Total annual rainfall',
     'units': 'mm',
 }
 METRIC_ATTRS['annAveTmax'] = {
-    'long_name': '',
-    'units': '',
+    'long_name': 'Annual average daily maximum temperature',
+    'units': 'degC',
 }
 METRIC_ATTRS['annAveTmin'] = {
-    'long_name': '',
-    'units': '',
+    'long_name': 'Annual average daily minimum temperature',
+    'units': 'degC',
 }
 METRIC_ATTRS['summerPR'] = {
-    'long_name': '',
-    'units': '',
+    'long_name': 'Total summer precipitation (DJF)',
+    'units': 'mm',
 }
 METRIC_ATTRS['autummPR'] = {
-    'long_name': '',
-    'units': '',
+    'long_name': 'Total autumn precipitation (MAM)',
+    'units': 'mm',
 }
 METRIC_ATTRS['winterPR'] = {
-    'long_name': '',
-    'units': '',
+    'long_name': 'Total winter precipitation (JJA)',
+    'units': 'mm',
 }
 METRIC_ATTRS['springPR'] = {
-    'long_name': '',
-    'units': '',
+    'long_name': 'Total spring precipitation (SON)',
+    'units': 'mm',
 }
 METRIC_ATTRS['drySeasonPR'] = {
-    'long_name': '',
-    'units': '',
+    'long_name': 'Total dry season precipitation (May-Aug)',
+    'units': 'mm',
 }
 METRIC_ATTRS['wetSeasonPR'] = {
-    'long_name': '',
-    'units': '',
+    'long_name': 'Total wet season precipitation (Oct-Apr)',
+    'units': 'mm',
 }
 METRIC_ATTRS['annHotdays'] = {
-    'long_name': '',
-    'units': '',
+    'long_name': 'Annual number of hot days', #threshold for hot??
+    'units': 'days',
 }
 METRIC_ATTRS['springFrostdays'] = {
-    'long_name': '',
-    'units': '',
+    'long_name': 'Number of frost days in spring (SON)',
+    'units': 'days',
 }
 
