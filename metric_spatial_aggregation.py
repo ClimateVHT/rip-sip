@@ -1,5 +1,5 @@
 '''Command line program for spatial aggregation of metric files.'''
-import pdb
+
 import glob
 import argparse
 import datetime
@@ -21,10 +21,8 @@ import definitions
 #- UQ (CCAM-v2112)
 #- UQ (CCAM-v210)
 
-#/datasets/work/af-ag2050-climate/reference/ag2050_extension_metrics_outputs/100_2025-may_cdx_cs_a-e5_h_ccam-2203_q-agcd/annRain.csv
-#'2_2025-may_cdx_bom_a-cm2_h_bar_q-barra'.split('_')
-#index, data, project, institution, gcm, exp, rcm, bias = '2_2025-may_cdx_bom_a-cm2_h_bar_q-barra'.split('_')
-#institution_parts = institution.split('_')
+# Example file location:
+# /datasets/work/af-ag2050-climate/reference/ag2050_extension_metrics_outputs/100_2025-may_cdx_cs_a-e5_h_ccam-2203_q-agcd/annRain.csv
 
 
 def lat_index_to_value(lat_index):
@@ -111,7 +109,7 @@ def add_metadata(ds, metric_name, region_name):
     ds['time'].attrs['standard_name'] = 'time'
     ds['time'].attrs['axis'] = 'T'
     
-    ds.attrs['history'] = cmdprov.new_log(git_repo='https://github.com/DamienIrving/rip-sip')
+    ds.attrs['history'] = cmdprov.new_log(code_url='https://github.com/DamienIrving/rip-sip')
     ds.attrs['processing'] = f'Area-weighted average over the {region_name} spatial region'
     
     encoding = {}
@@ -144,9 +142,8 @@ def main(args):
                     bias_name = definitions.BIAS_NAMES[bias]
                     fpattern = f'{dir_start}/*_{gcm}_{exp}_{rcm}_{bias}/{args.metric}.csv'
                     infile = glob.glob(fpattern)
-                    print(fpattern)
-                    print(infile)
-                    assert len(infile) == 1
+                    assert len(infile) == 1, f'problem locating metric file at {fpattern}'
+                    print(infile[0])
                     da = read_data(infile[0])
                     da_region_mean = spatial_mean(da, region)
                     da_region_mean['bc'] = bias_name
