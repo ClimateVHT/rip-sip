@@ -65,23 +65,6 @@ def read_data(infile):
     return da
 
 
-def read_region(region_name):
-    """Read shapefile for a given broadacre region"""
-        
-    broadacre_gdf = gp.read_file('aagis_asgs16v1_g5a.shp_/aagis_asgs16v1_g5a.shp')
-    if region_name == 'aus-wheatbelt':
-        wheatbelt_gdf = broadacre_gdf[broadacre_gdf.zone == 'Wheat Sheep']
-        wheatbelt = wheatbelt_gdf.dissolve()
-        wheatbelt = wheatbelt.drop(columns=['aagis', 'class', 'name'])
-        region = regionmask.from_geopandas(
-            wheatbelt, names="zone", name="aus-wheatbelt"
-        )
-    else:
-        raise ValueError(f'{region_name} is not a recognised region')
-    
-    return region
-
-
 def spatial_mean(da, region):
     """Calculate the spatial mean for a given region."""
     
@@ -95,7 +78,7 @@ def spatial_mean(da, region):
     return da_region_mean
 
 
-def add_metadata(ds, metric_name, region_name):
+def add_metadata(ds, metric_name, region_abbrev):
     """Add metadata to the output dataset"""
    
     ds = ds.rename({'out': metric_name})
@@ -110,7 +93,9 @@ def add_metadata(ds, metric_name, region_name):
     ds['time'].attrs['axis'] = 'T'
     
     ds.attrs['history'] = cmdprov.new_log(code_url='https://github.com/DamienIrving/rip-sip')
-    ds.attrs['processing'] = f'Area-weighted average over the {region_name} spatial region'
+    region_name = definitions.REGION_NAME[region_abbrev]
+    region_source = defintions.REGION_SOURCE[region_abbrev]
+    ds.attrs['processing'] = f'Area-weighted spatial average over the {region_name} (shapefiles at {region_source})'
     
     encoding = {}
     encoding['time'] = {}
@@ -122,24 +107,24 @@ def add_metadata(ds, metric_name, region_name):
 def main(args):
     '''Run the program.'''
 
-    gcms = definitions.GCM_NAMES[args.institution].keys()
-    rcms = definitions.RCM_NAMES[args.institution].keys()
-    exps = definitions.EXPERIMENT_NAMES.keys()
-    biases = definitions.BIAS_NAMES.keys()
+    gcms = definitions.GCM_NAME[args.institution].keys()
+    rcms = definitions.RCM_NAME[args.institution].keys()
+    exps = definitions.EXPERIMENT_NAME.keys()
+    biases = definitions.BIAS_NAME.keys()
     dir_start = '/datasets/work/af-ag2050-climate/reference/ag2050_extension_metrics_outputs'
-    region = read_region(args.region)
+    region = definitions.REGION_FUNC(args.region)
     exp_dict = {}
     for exp in exps:
-        exp_name = definitions.EXPERIMENT_NAMES[exp]
+        exp_name = definitions.EXPERIMENT_NAME[exp]
         gcm_list = []
         for gcm in gcms:
-            gcm_name = definitions.GCM_NAMES[args.institution][gcm]
+            gcm_name = definitions.GCM_NAME[args.institution][gcm]
             rcm_list = []
             for rcm in rcms:
-                rcm_name = definitions.RCM_NAMES[args.institution][rcm]
+                rcm_name = definitions.RCM_NAME[args.institution][rcm]
                 bc_list = []
                 for bias in biases:
-                    bias_name = definitions.BIAS_NAMES[bias]
+                    bias_name = definitions.BIAS_NAME[bias]
                     fpattern = f'{dir_start}/*_{gcm}_{exp}_{rcm}_{bias}/{args.metric}.csv'
                     infile = glob.glob(fpattern)
                     assert len(infile) == 1, f'problem locating metric file at {fpattern}'
@@ -152,7 +137,7 @@ def main(args):
                 da_bias['rcm'] = rcm_name
                 rcm_list.append(da_bias)
             da_rcm = xr.concat(rcm_list, dim='rcm')
-            run = definitions.RUNS[(gcm_name, rcm_name)]
+            run = definitions.RUN[(gcm_name, rcm_name)]
             da_rcm['gcm'] = f'{gcm_name}_{run}'
             gcm_list.append(da_rcm)
         da_gcm = xr.concat(gcm_list, dim='gcm')     
@@ -173,10 +158,11 @@ if __name__ == '__main__':
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
     metrics = list(definitions.METRIC_ATTRS.keys())
-    institutions = list(definitions.INSTITUTION_NAMES.keys())
+    institutions = list(definitions.INSTITUTION_NAME.keys())
+    regions = list(definitions.REGION_NAME.keys())
     parser.add_argument('metric', type=str, choices=metrics, help='input variable')
     parser.add_argument('institution', type=str, choices=institutions, help='institution to process')
-    parser.add_argument('region', type=str, choices=('aus-wheatbelt',), help='region for spatial aggregation')
+    parser.add_argument('region', type=str, choices=regions, help='region for spatial aggregation')
     parser.add_argument('outfile', type=str, help='output file')
     args = parser.parse_args()
     main(args)
