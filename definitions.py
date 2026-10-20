@@ -208,16 +208,20 @@ def get_broadacre_region(region_name):
         
     broadacre_gdf = gp.read_file('shapefiles/aagis_asgs16v1_g5a.shp')
     if region_name == 'wheatbelt':
-        wheatbelt_gdf = broadacre_gdf[broadacre_gdf.zone == 'Wheat Sheep']
-        wheatbelt = wheatbelt_gdf.dissolve()
-        wheatbelt = wheatbelt.drop(columns=['aagis', 'class', 'name'])
-        region = regionmask.from_geopandas(
-            wheatbelt, names="zone", name="wheatbelt"
-        )
+        gdf = broadacre_gdf[broadacre_gdf.zone == 'Wheat Sheep']
+    elif region_name == 'cropping':
+        gdf = broadacre_gdf[broadacre_gdf.zone != 'Pastoral']
     else:
         raise ValueError(f'{region_name} is not a recognised broadacre region')
     
+    gdf = gdf.dissolve()
+    gdf = gdf.drop(columns=['aagis', 'class', 'name'])
+    region = regionmask.from_geopandas(
+        gdf, names="zone", name=region_name
+    )
+
     return region
+
 
 def get_ncra_region(region_name):
     """Read shapefile for a given NCRA region"""
@@ -227,8 +231,10 @@ def get_ncra_region(region_name):
     
     return region
 
+
 REGION_FUNC = {
     'wheatbelt': get_broadacre_region,
+    'cropping': get_broadacre_region,
     'ncra_sth': get_ncra_region,
     'ncra_nth': get_ncra_region,
     'mod_ncra_nth': get_ncra_region,
@@ -240,6 +246,7 @@ REGION_FUNC = {
 
 REGION_NAME = {
     'wheatbelt': 'ABARES wheat sheep broadacre zone',
+    'cropping': 'ABARES wheat sheep and high rainfall broadacre zones combined',
     'ncra_sth': 'NCRA southern Australia region',
     'ncra_nth': 'NCRA northern Australia region',
     'mod_ncra_nth': 'modified NCRA northern Australia region',
@@ -250,6 +257,7 @@ REGION_NAME = {
 
 REGION_SOURCE = {
     'wheatbelt': 'https://www.agriculture.gov.au/abares/research-topics/surveys/farm-survey-data',
+    'cropping': 'https://www.agriculture.gov.au/abares/research-topics/surveys/farm-survey-data',
     'ncra_sth': 'https://doi.org/10.25919/8tqq-0007',
     'ncra_nth': 'https://doi.org/10.25919/8tqq-0007',
     'mod_ncra_nth': 'https://doi.org/10.25919/8tqq-0007',
