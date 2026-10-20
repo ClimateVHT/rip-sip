@@ -1,5 +1,9 @@
 """Module containing various abbreviations and file attributes"""
 
+import geopandas as gp
+import regionmask
+
+
 # Data reference syntax for metric files
 
 EXPERIMENT_NAME = {

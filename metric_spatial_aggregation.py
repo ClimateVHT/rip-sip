@@ -7,8 +7,6 @@ import datetime
 import numpy as np
 import pandas as pd
 import xarray as xr
-import geopandas as gp
-import regionmask
 import cmdline_provenance as cmdprov
 
 import definitions
@@ -70,13 +68,12 @@ def spatial_mean(da, region):
     return da_region_mean
 
 
-def add_metadata(ds, metric_name, region_abbrev):
+def add_metadata(ds, metric_name, rcm_name, region_abbrev):
     """Add metadata to the output dataset"""
    
     ds = ds.rename({'out': metric_name})
     ds[metric_name].attrs = definitions.METRIC_ATTRS[metric_name]
     ds['experiment'].attrs['long_name'] = 'Emission scenario'
-    ds['rcm'].attrs['long_name'] = 'Regional Climate Model'
     ds['gcm'].attrs['long_name'] = 'Global Climate Model'
     ds['gcm'].attrs['format'] = 'gcm_run'
     ds['bc'].attrs['long_name'] = 'Bias correction method'
@@ -84,11 +81,12 @@ def add_metadata(ds, metric_name, region_abbrev):
     ds['time'].attrs['standard_name'] = 'time'
     ds['time'].attrs['axis'] = 'T'
     
-    ds.attrs['history'] = cmdprov.new_log(code_url='https://github.com/DamienIrving/rip-sip')
+    ds.attrs['history'] = cmdprov.new_log(code_url='https://github.com/ClimateVHT/rip-sip')
     region_name = definitions.REGION_NAME[region_abbrev]
-    region_source = defintions.REGION_SOURCE[region_abbrev]
+    region_source = definitions.REGION_SOURCE[region_abbrev]
+    ds.attrs['rcm'] = rcm_name
     ds.attrs['processing'] = f'Area-weighted spatial average over the {region_name} (shapefiles at {region_source})'
-    
+
     encoding = {}
     encoding['time'] = {}
     encoding['time']['units'] = 'days since 1850-01-01'
@@ -103,7 +101,7 @@ def main(args):
     exps = definitions.EXPERIMENT_NAME.keys()
     biases = definitions.BIAS_NAME.keys()
     dir_start = '/datasets/work/af-ag2050-climate/reference/ag2050_extension_metrics_outputs'
-    region = definitions.REGION_FUNC(args.region)
+    region = definitions.REGION_FUNC[args.region](args.region)
     rcm_name = definitions.RCM_NAME[args.rcm]
     exp_dict = {}
     for exp in exps:
@@ -116,10 +114,13 @@ def main(args):
                 bias_name = definitions.BIAS_NAME[bias]
                 fpattern = f'{dir_start}/*_{gcm}_{exp}_{args.rcm}_{bias}/{args.metric}.csv'
                 infile = glob.glob(fpattern)
-                assert len(infile) == 1, f'problem locating metric file at {fpattern}'
-                print(infile[0])
-                da = read_data(infile[0])
-                da_region_mean = spatial_mean(da, region)
+                if len(infile) == 1:
+                    print(infile[0])
+                    da = read_data(infile[0])
+                    da_region_mean = spatial_mean(da, region)
+                else:
+                    print(f'problem locating metric file at {fpattern}')
+                    da_region_mean = bc_list[-1] * np.nan
                 da_region_mean['bc'] = bias_name
                 bc_list.append(da_region_mean)
             da_bias = xr.concat(bc_list, dim='bc')
@@ -128,13 +129,13 @@ def main(args):
             gcm_list.append(da_bias)
         da_gcm = xr.concat(gcm_list, dim='gcm')
         exp_dict[exp_name] = da_gcm
-    
+
     ds_ssp126 = xr.combine_by_coords([exp_dict['historical'], exp_dict['ssp126']])
     ds_ssp126['experiment'] = 'ssp126'
     ds_ssp370 = xr.combine_by_coords([exp_dict['historical'], exp_dict['ssp370']])
     ds_ssp370['experiment'] = 'ssp370'
     ds_ssp = xr.concat([ds_ssp126, ds_ssp370], dim='experiment')
-    ds_out, encoding = add_metadata(ds_ssp, args.metric, args.region)
+    ds_out, encoding = add_metadata(ds_ssp, args.metric, rcm_name, args.region)
     ds_out.to_netcdf(args.outfile, encoding=encoding)
 
 
