@@ -15,17 +15,21 @@ BIAS_NAME = {
     'q-barra': 'v1-r1-ACS-QME-BARRAR2-1980-2022',
 }
 
-INSTITUTION_NAME = {
-    'bom': 'BOM',
-    'cs': 'CSIRO',
-    'nsw': 'NSW-Government',
-    'uq-ccamo-2112': 'UQ-DEC',
-    'uq-ccam-2112': 'UQ-DEC',
-    'uq-ccam-2105': 'UQ-DEC',
+RCM_NAME = {
+    'bar': 'BARPA-R',
+    'ccam-2203': 'CCAM-v2203-SN',
+    'nar-r3': 'NARCliM2-0-WRF412R3',
+    'nar-r5': 'NARCliM2-0-WRF412R5',
+    'ccamo-2112': 'CCAMoc-v2112',
+    'ccamo-2112-r4': 'CCAMoc-v2112',
+    'ccamo-2112-r2': 'CCAMoc-v2112',
+    'ccam-2112': 'CCAM-v2112',
+    'ccam-2105': 'CCAM-v2105',
+    'ccam-2105-r6': 'CCAM-v2105',
 }
 
 GCM_NAME = {}
-GCM_NAME['bom'] = {
+GCM_NAME['bar'] = {
     'a-cm2': 'ACCESS-CM2',
     'a-e5': 'ACCESS-ESM1-5',
     'ce2': 'CESM2',
@@ -34,34 +38,45 @@ GCM_NAME['bom'] = {
     'mpi-2h': 'MPI-ESM1-2-HR', 
     'nor-mm': 'NorESM2-MM',
 }
-GCM_NAME['cs'] = {
+GCM_NAME['ccam-2203'] = {
     'a-cm2': 'ACCESS-CM2',
     'a-e5': 'ACCESS-ESM1-5',
     'ce2': 'CESM2',
     'cm-e2': 'CMCC-ESM2',
-    'cn-c61': 'CNRM-CM6-1-HR',
+    'cn-e21': 'CNRM-ESM2-1',
     'ea-3': 'EC-Earth3',
     'nor-mm': 'NorESM2-MM',
 }
-GCM_NAME['nsw'] = {
+GCM_NAME['nar-r3'] = {
+    'a-e5': 'ACCESS-ESM1-5',
+    'ea-3v': 'EC-Earth3-Veg',
+    'mpi-2h': 'MPI-ESM1-2-HR', 
+    'nor-mm': 'NorESM2-MM',
+    'uk-0ll': 'UKESM1-0-LL' 
+}
+GCM_NAME['nar-r5'] = {
     'a-e5': 'ACCESS-ESM1-5',
     'ea-3v': 'EC-Earth3-Veg',
     'mpi-2h': 'MPI-ESM1-2-HR', 
     'nor-mm': 'NorESM2-MM',
     'uk-0ll': 'UKESM1-0-LL' 
 } 
-GCM_NAME['uq-ccamo-2112'] = {
+GCM_NAME['ccamo-2112'] = {
     'a-cm2': 'ACCESS-CM2',
-    'a-e5': 'ACCESS-ESM1-5',
     'cn-c61': 'CNRM-CM6-1-HR',
     'nor-mm': 'NorESM2-MM',
 }
-GCM_NAME['uq-ccam-2112'] = {
+GCM_NAME['ccamo-2112-r2'] = {
+    'a-e5': 'ACCESS-ESM1-5',
+}
+GCM_NAME['ccamo-2112-r4'] = {
+    'a-e5': 'ACCESS-ESM1-5',
+}
+GCM_NAME['ccam-2112'] = {
     'cn-c61': 'CNRM-CM6-1-HR',
     'nor-mm': 'NorESM2-MM',
 }
-GCM_NAME['uq-ccam-2105'] = {
-    'a-e5': 'ACCESS-ESM1-5',
+GCM_NAME['ccam-2105'] = {
     'cm-e2': 'CMCC-ESM2',
     'ea-3': 'EC-Earth3',
     'fg-3': 'FGOALS-g3',
@@ -70,57 +85,50 @@ GCM_NAME['uq-ccam-2105'] = {
     'mpi-2l': 'MPI-ESM1-2-LR',
     'mri-e0': 'MRI-ESM2-0', 
 }
-
-RCM_NAME = {}
-RCM_NAME['bom'] = {'bar': 'BARPA-R'}
-RCM_NAME['cs'] = {'ccam-2203': 'CCAM-v2203-SN'}
-RCM_NAME['nsw'] = {'nar-r3': 'NARCliM2-0-WRF412R3', 'nar-r5': 'NARCliM2-0-WRF412R5'}
-RCM_NAME['uq-ccamo-2112'] = {'ccamo-2112': 'CCAMoc-v2112'}
-RCM_NAME['uq-ccam-2112'] = {'ccam-2112': 'CCAM-v2112'}
-RCM_NAME['uq-ccam-2105'] = {'ccam-2105-r6': 'CCAM-v2105_r6i1p1f1'}
-RCM_NAME['uq-ccamo-2112-r4'] = {'ccamo-2112-r4': 'CCAMoc-v2112_r40i1p1f1'}
-RCM_NAME['uq-ccamo-2112-r2'] = {'ccamo-2112-r2': 'CCAMoc-v2112_r20i1p1f1'}
+GCM_NAME['ccam-2105-r6'] = {
+    'a-e5': 'ACCESS-ESM1-5',
+}
 
 RUN = {
-    ('ACCESS-CM2', 'CCAMoc-v2112'): 'r2i1p1f1',
-    ('ACCESS-CM2', 'BARPA-R'): 'r4i1p1f1',
-    ('ACCESS-CM2', 'CCAM-v2203-SN'): 'r4i1p1f1',
-    ('ACCESS-ESM1-5', 'BARPA-R'): 'r6i1p1f1',
-    ('ACCESS-ESM1-5', 'CCAM-v2105'): 'r6i1p1f1',
-    ('ACCESS-ESM1-5', 'CCAM-v2203-SN'): 'r6i1p1f1',
-    ('ACCESS-ESM1-5', 'NARCliM2-0-WRF412R3'): 'r6i1p1f1',
-    ('ACCESS-ESM1-5', 'NARCliM2-0-WRF412R5'): 'r6i1p1f1',
-    ('ACCESS-ESM1-5', 'CCAMoc-v2112'): 'r20i1p1f1',
-    ('ACCESS-ESM1-5', 'CCAMoc-v2112'): 'r40i1p1f1',
-    ('CESM2', 'BARPA-R'): 'r11i1p1f1',
-    ('CESM2', 'CCAM-v2203-SN'): 'r11i1p1f1',
-    ('CMCC-ESM2', 'BARPA-R'): 'r1i1p1f1',
-    ('CMCC-ESM2', 'CCAM-v2105'): 'r1i1p1f1',
-    ('CMCC-ESM2', 'CCAM-v2203-SN'): 'r1i1p1f1',
-    ('CNRM-CM6-1-HR', 'CCAMoc-v2112'): 'r1i1p1f2',
-    ('CNRM-CM6-1-HR', 'CCAM-v2112'): 'r1i1p1f2',
-    ('CNRM-ESM2-1', 'CCAM-v2203-SN'): 'r1i1p1f2',
-    ('EC-Earth3', 'BARPA-R'): 'r1i1p1f1',
-    ('EC-Earth3', 'CCAM-v2105'): 'r1i1p1f1',
-    ('EC-Earth3', 'CCAM-v2203-SN'): 'r1i1p1f1',
-    ('EC-Earth3-Veg', 'NARCliM2-0-WRF412R3'): 'r1i1p1f1',
-    ('EC-Earth3-Veg', 'NARCliM2-0-WRF412R5'): 'r1i1p1f1',
-    ('FGOALS-g3', 'CCAM-v2105'): 'r4i1p1f1',
-    ('GFDL-ESM4', 'CCAM-v2105'): 'r1i1p1f1',
-    ('GISS-E2-1-G', 'CCAM-v2105'): 'r2i1p1f2',
-    ('MPI-ESM1-2-HR', 'BARPA-R'): 'r1i1p1f1',
-    ('MPI-ESM1-2-LR', 'CCAM-v2105'): 'r9i1p1f1',
-    ('MPI-ESM1-2-HR', 'NARCliM2-0-WRF412R3'): 'r1i1p1f1',
-    ('MPI-ESM1-2-HR', 'NARCliM2-0-WRF412R5'): 'r1i1p1f1',
-    ('MRI-ESM2-0', 'CCAM-v2105'): 'r1i1p1f1',
-    ('NorESM2-MM', 'BARPA-R'): 'r1i1p1f1',
-    ('NorESM2-MM', 'CCAMoc-v2112'): 'r1i1p1f1',
-    ('NorESM2-MM', 'CCAM-v2112'): 'r1i1p1f1',
-    ('NorESM2-MM', 'CCAM-v2203-SN'): 'r1i1p1f1',
-    ('NorESM2-MM', 'NARCliM2-0-WRF412R3'): 'r1i1p1f1',
-    ('NorESM2-MM', 'NARCliM2-0-WRF412R5'): 'r1i1p1f1',
-    ('UKESM1-0-LL', 'NARCliM2-0-WRF412R3'): 'r1i1p1f2',
-    ('UKESM1-0-LL', 'NARCliM2-0-WRF412R5'): 'r1i1p1f2',
+    ('a-cm2', 'ccamo-2112'): 'r2i1p1f1',
+    ('a-cm2', 'bar'): 'r4i1p1f1',
+    ('a-cm2', 'ccam-2203'): 'r4i1p1f1',
+    ('a-e5', 'bar'): 'r6i1p1f1',
+    ('a-e5', 'ccam-2105-r6'): 'r6i1p1f1',
+    ('a-e5', 'ccam-2203'): 'r6i1p1f1',
+    ('a-e5', 'nar-r3'): 'r6i1p1f1',
+    ('a-e5', 'nar-r5'): 'r6i1p1f1',
+    ('a-e5', 'ccamo-2112-r2'): 'r20i1p1f1',
+    ('a-e5', 'ccamo-2112-r2'): 'r40i1p1f1',
+    ('ce2', 'bar'): 'r11i1p1f1',
+    ('ce2', 'ccam-2203'): 'r11i1p1f1',
+    ('cm-e2', 'bar'): 'r1i1p1f1',
+    ('cm-e2', 'ccam-2105'): 'r1i1p1f1',
+    ('cm-e2', 'ccam-2203'): 'r1i1p1f1',
+    ('cn-c61', 'ccamo-2112'): 'r1i1p1f2',
+    ('cn-c61', 'ccam-2112'): 'r1i1p1f2',
+    ('cn-e21', 'ccam-2203'): 'r1i1p1f2',
+    ('ea-3', 'bar'): 'r1i1p1f1',
+    ('ea-3', 'ccam-2105'): 'r1i1p1f1',
+    ('ea-3', 'ccam-2203'): 'r1i1p1f1',
+    ('ea-3v', 'nar-r3'): 'r1i1p1f1',
+    ('ea-3', 'nar-r5'): 'r1i1p1f1',
+    ('f-g3', 'ccam-2105'): 'r4i1p1f1',
+    ('gf-e4', 'ccam-2105'): 'r1i1p1f1',
+    ('gi-e2g', 'ccam-2105'): 'r2i1p1f2',
+    ('mpi-2h', 'bar'): 'r1i1p1f1',
+    ('mpi-2l', 'ccam-2105'): 'r9i1p1f1',
+    ('mpi-2h', 'nar-r3'): 'r1i1p1f1',
+    ('mpi-2h', 'nar-r5'): 'r1i1p1f1',
+    ('mri-e0', 'ccam-2105'): 'r1i1p1f1',
+    ('nor-mm', 'bar'): 'r1i1p1f1',
+    ('nor-mm', 'ccamo-2112'): 'r1i1p1f1',
+    ('nor-mm', 'ccam-2112'): 'r1i1p1f1',
+    ('nor-mm', 'ccam-2203'): 'r1i1p1f1',
+    ('nor-mm', 'nar-r3'): 'r1i1p1f1',
+    ('nor-mm', 'nar-r5'): 'r1i1p1f1',
+    ('uk-0ll', 'nar-r3'): 'r1i1p1f2',
+    ('uk-0ll', 'nar-r5'): 'r1i1p1f2',
 }
 
 

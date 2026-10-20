@@ -13,14 +13,6 @@ import cmdline_provenance as cmdprov
 
 import definitions
 
-##output files:
-#- BOM
-#- CSIRO
-#- NSW Government
-#- UQ (CCAMoc-v2112)
-#- UQ (CCAM-v2112)
-#- UQ (CCAM-v210)
-
 # Example file location:
 # /datasets/work/af-ag2050-climate/reference/ag2050_extension_metrics_outputs/100_2025-may_cdx_cs_a-e5_h_ccam-2203_q-agcd/annRain.csv
 
@@ -107,40 +99,34 @@ def add_metadata(ds, metric_name, region_abbrev):
 def main(args):
     '''Run the program.'''
 
-    gcms = definitions.GCM_NAME[args.institution].keys()
-    rcms = definitions.RCM_NAME[args.institution].keys()
+    gcms = definitions.GCM_NAME[args.rcm].keys()
     exps = definitions.EXPERIMENT_NAME.keys()
     biases = definitions.BIAS_NAME.keys()
     dir_start = '/datasets/work/af-ag2050-climate/reference/ag2050_extension_metrics_outputs'
     region = definitions.REGION_FUNC(args.region)
+    rcm_name = definitions.RCM_NAME[args.rcm]
     exp_dict = {}
     for exp in exps:
         exp_name = definitions.EXPERIMENT_NAME[exp]
         gcm_list = []
         for gcm in gcms:
-            gcm_name = definitions.GCM_NAME[args.institution][gcm]
-            rcm_list = []
-            for rcm in rcms:
-                rcm_name = definitions.RCM_NAME[args.institution][rcm]
-                bc_list = []
-                for bias in biases:
-                    bias_name = definitions.BIAS_NAME[bias]
-                    fpattern = f'{dir_start}/*_{gcm}_{exp}_{rcm}_{bias}/{args.metric}.csv'
-                    infile = glob.glob(fpattern)
-                    assert len(infile) == 1, f'problem locating metric file at {fpattern}'
-                    print(infile[0])
-                    da = read_data(infile[0])
-                    da_region_mean = spatial_mean(da, region)
-                    da_region_mean['bc'] = bias_name
-                    bc_list.append(da_region_mean)
-                da_bias = xr.concat(bc_list, dim='bc')
-                da_bias['rcm'] = rcm_name
-                rcm_list.append(da_bias)
-            da_rcm = xr.concat(rcm_list, dim='rcm')
-            run = definitions.RUN[(gcm_name, rcm_name)]
-            da_rcm['gcm'] = f'{gcm_name}_{run}'
-            gcm_list.append(da_rcm)
-        da_gcm = xr.concat(gcm_list, dim='gcm')     
+            gcm_name = definitions.GCM_NAME[args.rcm][gcm]
+            bc_list = []
+            for bias in biases:
+                bias_name = definitions.BIAS_NAME[bias]
+                fpattern = f'{dir_start}/*_{gcm}_{exp}_{args.rcm}_{bias}/{args.metric}.csv'
+                infile = glob.glob(fpattern)
+                assert len(infile) == 1, f'problem locating metric file at {fpattern}'
+                print(infile[0])
+                da = read_data(infile[0])
+                da_region_mean = spatial_mean(da, region)
+                da_region_mean['bc'] = bias_name
+                bc_list.append(da_region_mean)
+            da_bias = xr.concat(bc_list, dim='bc')
+            run = definitions.RUN[(gcm, args.rcm)]  
+            da_bias['gcm'] = f'{gcm_name}_{run}' 
+            gcm_list.append(da_bias)
+        da_gcm = xr.concat(gcm_list, dim='gcm')
         exp_dict[exp_name] = da_gcm
     
     ds_ssp126 = xr.combine_by_coords([exp_dict['historical'], exp_dict['ssp126']])
@@ -158,10 +144,10 @@ if __name__ == '__main__':
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
     metrics = list(definitions.METRIC_ATTRS.keys())
-    institutions = list(definitions.INSTITUTION_NAME.keys())
+    rcms = list(definitions.RCM_NAME.keys())
     regions = list(definitions.REGION_NAME.keys())
     parser.add_argument('metric', type=str, choices=metrics, help='input variable')
-    parser.add_argument('institution', type=str, choices=institutions, help='institution to process')
+    parser.add_argument('rcm', type=str, choices=rcms, help='rcm to process')
     parser.add_argument('region', type=str, choices=regions, help='region for spatial aggregation')
     parser.add_argument('outfile', type=str, help='output file')
     args = parser.parse_args()
