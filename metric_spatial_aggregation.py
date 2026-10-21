@@ -3,6 +3,7 @@
 import glob
 import argparse
 import datetime
+import random
 
 import numpy as np
 import pandas as pd
@@ -99,7 +100,9 @@ def main(args):
 
     gcms = definitions.GCM_NAME[args.rcm].keys()
     exps = definitions.EXPERIMENT_NAME.keys()
-    biases = definitions.BIAS_NAME.keys()
+    biases = list(definitions.BIAS_NAME.keys())
+    if args.shuffle:
+        random.shuffle(biases)
     dir_start = '/datasets/work/af-ag2050-climate/reference/ag2050_extension_metrics_outputs'
     region = definitions.REGION_FUNC[args.region](args.region)
     rcm_name = definitions.RCM_NAME[args.rcm]
@@ -115,11 +118,15 @@ def main(args):
                 fpattern = f'{dir_start}/*_{gcm}_{exp}_{args.rcm}_{bias}/{args.metric}.csv'
                 infile = glob.glob(fpattern)
                 if len(infile) == 1:
-                    print(infile[0])
-                    da = read_data(infile[0])
-                    da_region_mean = spatial_mean(da, region)
+                    try:
+                        print(infile[0])
+                        da = read_data(infile[0])
+                        da_region_mean = spatial_mean(da, region)
+                    except ValueError:
+                        print(f'problem processing metric file: {infile[0]}. Skipping.')
+                        da_region_mean = bc_list[-1] * np.nan
                 else:
-                    print(f'problem locating metric file at {fpattern}')
+                    print(f'no metric file at {fpattern}')
                     da_region_mean = bc_list[-1] * np.nan
                 da_region_mean['bc'] = bias_name
                 bc_list.append(da_region_mean)
@@ -151,5 +158,6 @@ if __name__ == '__main__':
     parser.add_argument('rcm', type=str, choices=rcms, help='rcm to process')
     parser.add_argument('region', type=str, choices=regions, help='region for spatial aggregation')
     parser.add_argument('outfile', type=str, help='output file')
+    parser.add_argument('--shuffle', action='store_true', default=False, help='shuffle bias order to avoid error')
     args = parser.parse_args()
     main(args)
