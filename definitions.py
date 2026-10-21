@@ -161,11 +161,11 @@ METRIC_ATTRS['croppingFS'] = {
 }
 METRIC_ATTRS['THItemperate'] = {
     'long_name': 'Temperature-humidity index calibrated for a temperate climate',
-    'units': 'days', #???
+    'units': 'ndays',
 }
 METRIC_ATTRS['THItropical'] = {
     'long_name': 'Temperature-humidity index calibrated for a tropical climate',
-    'units': 'days',  #???
+    'units': 'ndays',
 }
 METRIC_ATTRS['annRain'] = {
     'long_name': 'Total annual rainfall',
@@ -205,11 +205,11 @@ METRIC_ATTRS['wetSeasonPR'] = {
 }
 METRIC_ATTRS['annHotdays'] = {
     'long_name': 'Annual number of hot days', #threshold for hot??
-    'units': 'days',
+    'units': 'ndays',
 }
 METRIC_ATTRS['springFrostdays'] = {
     'long_name': 'Number of frost days in spring (SON)',
-    'units': 'days',
+    'units': 'ndays',
 }
 
 
