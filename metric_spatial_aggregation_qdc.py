@@ -89,6 +89,7 @@ def main(args):
             da_obs['gcm'] = f'{gcm_name}_{run}' 
             gcm_list.append(da_obs)
         da_gcm = xr.concat(gcm_list, dim='gcm')
+        da_gcm['experiment'] = exp_name
         exp_list.append(da_gcm)
     da_exp = xr.concat(exp_list, dim='experiment')
 
