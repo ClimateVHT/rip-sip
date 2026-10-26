@@ -6,10 +6,14 @@ import regionmask
 
 # Data reference syntax for metric files
 
+OBS_NAME = {'agcd': 'AGCD', 'barra': 'BARRA-R2'}
+
 EXPERIMENT_NAME = {
     'h': 'historical',
     's126': 'ssp126',
+    's245': 'ssp245',
     's370': 'ssp370',
+    's585': 'ssp585',
 }
 
 BIAS_NAME = {
@@ -92,38 +96,56 @@ GCM_NAME['ccam-2105'] = {
 GCM_NAME['ccam-2105-r6'] = {
     'a-e5': 'ACCESS-ESM1-5',
 }
+GCM_NAME['qdc'] = {
+    'a-cm2': 'ACCESS-CM2',
+    'a-e5': 'ACCESS-ESM1-5',
+    'ce2': 'CESM2',
+    'cm-e2': 'CMCC-ESM2',
+    'cn-e21': 'CNRM-ESM2-1',
+    'ea-3': 'EC-Earth3',
+    'mpi-2h': 'MPI-ESM1-2-HR', 
+    'nor-mm': 'NorESM2-MM',
+    'uk-0ll': 'UKESM1-0-LL' 
+}
 
 RUN = {
     ('a-cm2', 'ccamo-2112'): 'r2i1p1f1',
     ('a-cm2', 'bar'): 'r4i1p1f1',
     ('a-cm2', 'ccam-2203'): 'r4i1p1f1',
+    ('a-cm2', 'qdc'): 'r4i1p1f1',
     ('a-e5', 'bar'): 'r6i1p1f1',
     ('a-e5', 'ccam-2105-r6'): 'r6i1p1f1',
     ('a-e5', 'ccam-2203'): 'r6i1p1f1',
     ('a-e5', 'nar-r3'): 'r6i1p1f1',
     ('a-e5', 'nar-r5'): 'r6i1p1f1',
+    ('a-e5', 'qdc'): 'r6i1p1f1',
     ('a-e5', 'ccamo-2112-r2'): 'r20i1p1f1',
     ('a-e5', 'ccamo-2112-r4'): 'r40i1p1f1',
     ('ce2', 'bar'): 'r11i1p1f1',
     ('ce2', 'ccam-2203'): 'r11i1p1f1',
+    ('ce2', 'qdc'): 'r11i1p1f1',
     ('cm-e2', 'bar'): 'r1i1p1f1',
     ('cm-e2', 'ccam-2105'): 'r1i1p1f1',
     ('cm-e2', 'ccam-2203'): 'r1i1p1f1',
+    ('cm-e2', 'qdc'): 'r1i1p1f1',
     ('cn-c61', 'ccamo-2112'): 'r1i1p1f2',
     ('cn-c61', 'ccam-2112'): 'r1i1p1f2',
     ('cn-e21', 'ccam-2203'): 'r1i1p1f2',
+    ('cn-e21', 'qdc'): 'r1i1p1f2',
     ('ea-3', 'bar'): 'r1i1p1f1',
     ('ea-3', 'ccam-2105'): 'r1i1p1f1',
     ('ea-3', 'ccam-2203'): 'r1i1p1f1',
+    ('ea-3', 'qdc'): 'r1i1p1f1',
     ('ea-3v', 'nar-r3'): 'r1i1p1f1',
     ('ea-3v', 'nar-r5'): 'r1i1p1f1',
     ('fg-3', 'ccam-2105'): 'r4i1p1f1',
     ('gf-e4', 'ccam-2105'): 'r1i1p1f1',
     ('gi-e2g', 'ccam-2105'): 'r2i1p1f2',
     ('mpi-2h', 'bar'): 'r1i1p1f1',
-    ('mpi-2l', 'ccam-2105'): 'r9i1p1f1',
+    ('mpi-2h', 'qdc'): 'r1i1p1f1',
     ('mpi-2h', 'nar-r3'): 'r1i1p1f1',
     ('mpi-2h', 'nar-r5'): 'r1i1p1f1',
+    ('mpi-2l', 'ccam-2105'): 'r9i1p1f1',
     ('mri-e0', 'ccam-2105'): 'r1i1p1f1',
     ('nor-mm', 'bar'): 'r1i1p1f1',
     ('nor-mm', 'ccamo-2112'): 'r1i1p1f1',
@@ -131,8 +153,10 @@ RUN = {
     ('nor-mm', 'ccam-2203'): 'r1i1p1f1',
     ('nor-mm', 'nar-r3'): 'r1i1p1f1',
     ('nor-mm', 'nar-r5'): 'r1i1p1f1',
+    ('nor-mm', 'qdc'): 'r1i1p1f1',
     ('uk-0ll', 'nar-r3'): 'r1i1p1f2',
     ('uk-0ll', 'nar-r5'): 'r1i1p1f2',
+    ('uk-0ll', 'qdc'): 'r1i1p1f2',
 }
 
 
